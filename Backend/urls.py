@@ -20,7 +20,8 @@ from demo1.views import query_all, query_by_count_index, home_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', home_page), # 所有记录
+    path('', home_page), # 所有记录
+    path('index/', home_page), # 主页
     path('index/<int:count_index>', query_by_count_index), # 所有记录
     path('index/all', query_all) # 指定计数器的记录
 ]
