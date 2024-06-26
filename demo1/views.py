@@ -1,25 +1,118 @@
 from django.shortcuts import render, redirect
-from .models import Info, BaseStation, PciBaseStation, MobileBaseStation
+from .models import LocationInfo, BaseStation, PciBaseStation, MobileBaseStation
 import json
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 
-def query_by_count_index(request, count_index):
+def query_info_by_ue_id(request, ue_id):
     if request.method == "GET":
-        info = Info.objects.filter(unsigned_message_count = count_index)
-        if len(info) != 0:
-            result = serialize("json", info)
+        location_info = LocationInfo.objects.filter(ue_id = ue_id)
+        if len(location_info) != 0:
+            result = serialize("json", location_info)
             return HttpResponse(result, content_type = 'application/json')
     dict = [
     ]
     return HttpResponse(json.dumps(dict), content_type = 'application/json')
 
-def query_all(request):
+def query_info_all(request):
     if request.method == "GET":
-        info = Info.objects.all()
-        if len(info) != 0:
-            result = serialize("json", info)
+        location_info = LocationInfo.objects.all()
+        if len(location_info) != 0:
+            result = serialize("json", location_info)
             return HttpResponse(result, content_type = 'application/json')
+    dict = [
+    ]
+    return HttpResponse(json.dumps(dict), content_type = 'application/json')
+
+def add_one_location_info(request):
+    if request.method == "POST":
+        seq_no = request.POST['seq_no']
+        ue_id = request.POST['ue_id']
+
+        serv_pci = request.POST['serv_pci']
+        serv_rsrp = request.POST['serv_rsrp']
+        serv_rsrq = request.POST['serv_rsrq']
+        serv_sinr = request.POST['serv_sinr']
+        serv_ta = request.POST['serv_ta']
+        serv_rssi = request.POST['serv_rssi']
+
+        reserve_1 = request.POST['reserve_1']
+        reserve_2 = request.POST['reserve_2']
+
+        nbr_pci_1 = request.POST['nbr_pci_1']
+        nbr_rsrp_1 = request.POST['nbr_rsrp_1']
+        nbr_rsrq_1 = request.POST['nbr_rsrq_1']
+        nbr_sinr_1 = request.POST['nbr_sinr_1']
+
+        nbr_pci_2 = request.POST['nbr_pci_2']
+        nbr_rsrp_2 = request.POST['nbr_rsrp_2']
+        nbr_rsrq_2 = request.POST['nbr_rsrq_2']
+        nbr_sinr_2 = request.POST['nbr_sinr_2']
+
+        nbr_pci_3 = request.POST['nbr_pci_3']
+        nbr_rsrp_3 = request.POST['nbr_rsrp_3']
+        nbr_rsrq_3 = request.POST['nbr_rsrq_3']
+        nbr_sinr_3 = request.POST['nbr_sinr_3']
+
+        nbr_pci_4 = request.POST['nbr_pci_4']
+        nbr_rsrp_4 = request.POST['nbr_rsrp_4']
+        nbr_rsrq_4 = request.POST['nbr_rsrq_4']
+        nbr_sinr_4 = request.POST['nbr_sinr_4']
+
+        nbr_pci_5 = request.POST['nbr_pci_5']
+        nbr_rsrp_5 = request.POST['nbr_rsrp_5']
+        nbr_rsrq_5 = request.POST['nbr_rsrq_5']
+        nbr_sinr_5 = request.POST['nbr_sinr_5']
+
+        if len(LocationInfo.objects.filter(ue_id = ue_id)) == 0:
+            new_location_info = LocationInfo()
+            new_location_info.seq_no = seq_no
+            new_location_info.ue_id = ue_id
+
+            new_location_info.serv_pci = serv_pci
+            new_location_info.serv_rsrp = serv_rsrp
+            new_location_info.serv_rsrq = serv_rsrq
+            new_location_info.serv_sinr = serv_sinr
+            new_location_info.serv_ta = serv_ta
+            new_location_info.serv_rssi = serv_rssi
+
+            new_location_info.reserve_1 = reserve_1
+            new_location_info.reserve_2 = reserve_2
+
+            new_location_info.nbr_pci_1 = nbr_pci_1
+            new_location_info.nbr_rsrp_1 = nbr_rsrp_1
+            new_location_info.nbr_rsrq_1 = nbr_rsrq_1
+            new_location_info.nbr_sinr_1 = nbr_sinr_1
+
+            new_location_info.nbr_pci_2 = nbr_pci_2
+            new_location_info.nbr_rsrp_2 = nbr_rsrp_2
+            new_location_info.nbr_rsrq_2 = nbr_rsrq_2
+            new_location_info.nbr_sinr_2 = nbr_sinr_2
+
+            new_location_info.nbr_pci_3 = nbr_pci_3
+            new_location_info.nbr_rsrp_3 = nbr_rsrp_3
+            new_location_info.nbr_rsrq_3 = nbr_rsrq_3
+            new_location_info.nbr_sinr_3 = nbr_sinr_3
+
+            new_location_info.nbr_pci_4 = nbr_pci_4
+            new_location_info.nbr_rsrp_4 = nbr_rsrp_4
+            new_location_info.nbr_rsrq_4 = nbr_rsrq_4
+            new_location_info.nbr_sinr_4 = nbr_sinr_4
+
+            new_location_info.nbr_pci_5 = nbr_pci_5
+            new_location_info.nbr_rsrp_5 = nbr_rsrp_5
+            new_location_info.nbr_rsrq_5 = nbr_rsrq_5
+            new_location_info.nbr_sinr_5 = nbr_sinr_5
+
+            new_location_info.save()
+            dict = [
+                {'status': 200, 'message': 'Success'}
+            ]
+            return HttpResponse(json.dumps(dict), content_type = 'application/json')
+        else:
+            dict = [
+            ]
+            return HttpResponse(json.dumps(dict), content_type = 'application/json')
     dict = [
     ]
     return HttpResponse(json.dumps(dict), content_type = 'application/json')
@@ -80,13 +173,13 @@ def en_register(request):
 def ue_reg(request):
     if request.method == "POST":
         msisdn = request.POST['msisdn'] # 基站 id
-        base_station_id = request.POST['base_station_id'] # 小区 id
+        # base_station_id = request.POST['base_station_id'] # 小区 id
         imsi = request.POST['imsi'] # 经度
-        if len(MobileBaseStation.objects.filter(msisdn = msisdn, base_station_id = base_station_id)) != 0:
+        if len(MobileBaseStation.objects.filter(msisdn = msisdn)) != 0:
             # new_mobile_base_station = MobileBaseStation(msisdn, base_station_id, imsi)
             new_mobile_base_station = MobileBaseStation()
             new_mobile_base_station.msisdn = msisdn
-            new_mobile_base_station.base_station_id = base_station_id
+            # new_mobile_base_station.base_station_id = base_station_id
             new_mobile_base_station.imsi = imsi
             new_mobile_base_station.save()
             dict = [

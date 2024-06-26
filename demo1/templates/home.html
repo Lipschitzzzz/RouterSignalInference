@@ -1,9 +1,9 @@
 <html>
     <head> Test </head>
     <meta charset="utf-8">
-    <title> Test </title>
+    <title> Test</title>
     <body>
-        <form action="/EN_Register" method="post">
+        <form action="test/enci/register" method="post">
             {% csrf_token %}
             enci: <input type="text" name="enci"><br>
             pci: <input type="text" name="pci"><br>
@@ -13,13 +13,55 @@
             azimuth: <input type="text" name="azimuth"><br>
             <input type="submit" value="提交">>
         </form>
-        <form action="/UE_Reg" method="post">
+        <br>
+        <form action="test/ue/register" method="post">
             {% csrf_token %}
             msisdn: <input type="text" name="msisdn"><br>
-            base_station_id: <input type="text" name="base_station_id"><br>
             imsi: <input type="text" name="imsi"><br>
             <input type="submit" value="提交">>
         </form>
-    </body>
+        <br>
+        <form action="test/location/add" method="post">
+            {% csrf_token %}
+            seq_no: <input type="text" name="seq_no"><br>
+            ue_id: <input type="text" name="ue_id"><br>
 
+            serv_pci: <input type="text" name="serv_pci"><br>
+            serv_rsrp: <input type="text" name="serv_rsrp"><br>
+            serv_rsrq: <input type="text" name="serv_rsrq"><br>
+            serv_sinr: <input type="text" name="serv_sinr"><br>
+            serv_ta: <input type="text" name="serv_ta"><br>
+            serv_rssi: <input type="text" name="serv_rssi"><br>
+
+            reserve_1: <input type="text" name="reserve_1"><br>
+            reserve_2: <input type="text" name="reserve_2"><br>
+
+            nbr_pci_1: <input type="text" name="nbr_pci_1">
+            nbr_rsrp_1: <input type="text" name="nbr_rsrp_1">
+            nbr_rsrq_1: <input type="text" name="nbr_rsrq_1">
+            nbr_sinr_1: <input type="text" name="nbr_sinr_1"><br>
+
+            nbr_pci_2: <input type="text" name="nbr_pci_2">
+            nbr_rsrp_2: <input type="text" name="nbr_rsrp_2">
+            nbr_rsrq_2: <input type="text" name="nbr_rsrq_2">
+            nbr_sinr_2: <input type="text" name="nbr_sinr_2"><br>
+
+            nbr_pci_3: <input type="text" name="nbr_pci_3">
+            nbr_rsrp_3: <input type="text" name="nbr_rsrp_3">
+            nbr_rsrq_3: <input type="text" name="nbr_rsrq_3">
+            nbr_sinr_3: <input type="text" name="nbr_sinr_3"><br>
+
+            nbr_pci_4: <input type="text" name="nbr_pci_4">
+            nbr_rsrp_4: <input type="text" name="nbr_rsrp_4">
+            nbr_rsrq_4: <input type="text" name="nbr_rsrq_4">
+            nbr_sinr_4: <input type="text" name="nbr_sinr_4"><br>
+
+            nbr_pci_5: <input type="text" name="nbr_pci_5">
+            nbr_rsrp_5: <input type="text" name="nbr_rsrp_5">
+            nbr_rsrq_5: <input type="text" name="nbr_rsrq_5">
+            nbr_sinr_5: <input type="text" name="nbr_sinr_5"><br>
+
+            <input type="submit" value="提交">>
+        </form>
+    </body>
 </html>

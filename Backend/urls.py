@@ -16,15 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from demo1.views import query_all, query_by_count_index, home_page, en_register, ue_reg
+from demo1.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page), # 所有记录
-    path('index/', home_page), # 主页
-    path('index/<int:count_index>', query_by_count_index), # 所有记录
-    path('index/all', query_all), # 指定计数器的记录
-    path('all/', query_all), # 指定计数器的记录
-    path('EN_Register', en_register), # 小区注册到基站
-    # path('UE_Reg', ue_reg) # 手机号注册到基站
+    path('test/location/<int:ue_id>', query_info_by_ue_id), # 指定ueid的记录
+    path('test/location/all', query_info_all), # 所有记录
+    path('test/location/add', add_one_location_info), # 指定计数器的记录
+    path('test/enci/register', en_register), # 小区注册到基站
+    path('test/ue/register', ue_reg) # 手机号注册到基站
 ]
