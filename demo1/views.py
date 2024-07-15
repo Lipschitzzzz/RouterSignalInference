@@ -3,6 +3,7 @@ from .models import LocationInfo, BaseStation, PciBaseStation, MobileBaseStation
 import json
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
+from Algorithm import intel_test
 
 def query_info_by_ue_id(request, ue_id):
     if request.method == "GET":
@@ -116,7 +117,7 @@ def add_one_location_info(request):
     dict = [
     ]
     return HttpResponse(json.dumps(dict), content_type = 'application/json')
-    
+
 def home_page(request):
     # dict = [
     #     {'id': 1, 'name': 'Ana'},
@@ -172,26 +173,57 @@ def en_register(request):
 
 def ue_reg(request):
     if request.method == "POST":
-        msisdn = request.POST['msisdn'] # 基站 id
-        # base_station_id = request.POST['base_station_id'] # 小区 id
-        imsi = request.POST['imsi'] # 经度
-        if len(MobileBaseStation.objects.filter(msisdn = msisdn)) != 0:
-            # new_mobile_base_station = MobileBaseStation(msisdn, base_station_id, imsi)
-            new_mobile_base_station = MobileBaseStation()
-            new_mobile_base_station.msisdn = msisdn
-            # new_mobile_base_station.base_station_id = base_station_id
-            new_mobile_base_station.imsi = imsi
-            new_mobile_base_station.save()
-            dict = [
-                {'status': 200, 'message': 'Success'}
-            ]
-            return HttpResponse(json.dumps(dict), content_type = 'application/json')
-        else:
-            dict = [
-            ]
-            return HttpResponse(json.dumps(dict), content_type = 'application/json')
-
+        data = json.loads(request.body)
+        # print(data)
+        # print(type(data))
+        # print(type(data['nbrs']))
+        # print(type(data['serv']))
+        # print(data['nbrs'])
+        # print(data['serv'])
+        _data = []
+        for i, j in data.items():
+            _data.append(j)
+            # print(i, j)
+        # print(_data)
+        result = intel_test.indoor_inf(_data)
+        # print(result)
+        # print(request.POST)
+        # print(request.POST['nbrs'])
+        # print(type(request.POST['nbrs']))
+        # print(request.POST['nbr1'])
+        # print(request.POST['serv'])
+        # print(type(request.POST['serv']))
+        # print(request.POST['serv'][0])
+        dict = [
+             {'status': 200,
+             'message': 'Success',
+             'result' : result}
+        ]
+        return HttpResponse(json.dumps(dict), content_type = 'application/json')
     dict = [
     ]
     return HttpResponse(json.dumps(dict), content_type = 'application/json')
+    #     msisdn = request.POST['msisdn'] # 基站 id
+    #     # base_station_id = request.POST['base_station_id'] # 小区 id
+    #     imsi = request.POST['imsi'] # 经度
+    #     # if len(MobileBaseStation.objects.filter(msisdn = msisdn)) == 0:
+    #         # new_mobile_base_station = MobileBaseStation(msisdn, base_station_id, imsi)
+    #     new_mobile_base_station = MobileBaseStation()
+    #     new_mobile_base_station.msisdn = msisdn
+    #         # new_mobile_base_station.base_station_id = base_station_id
+    #     new_mobile_base_station.imsi = imsi
+    #     try:
+    #         new_mobile_base_station.save()
+    #         dict = [
+    #             {'status': 200, 'message': 'Success'}
+    #         ]
+    #         return HttpResponse(json.dumps(dict), content_type = 'application/json')
+    #     except:
+    #         dict = [
+    #         ]
+    #         return HttpResponse(json.dumps(dict), content_type = 'application/json')
+
+    # dict = [
+    # ]
+    # return HttpResponse(json.dumps(dict), content_type = 'application/json')
 
