@@ -23,11 +23,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page), # 所有记录
-    path('test/location/<int:ue_id>', query_info_by_ue_id), # 指定ueid的记录
-    path('test/location/all', query_info_all), # 所有记录
-    path('test/location/add', add_one_location_info), # 指定计数器的记录
-    path('test/enci/register', en_register), # 小区注册到基站
-    path('test/ue/register', ue_reg) # 手机号注册到基站
+    path('test/location/<int:ue_id>', query_info_by_ue_id), # 指定ueid的记录 GET
+    path('test/location/all', query_info_all), # 所有记录 GET
+    path('test/location/add', add_one_location_info), # 指定计数器的记录 POST
+    path('test/enci/register', en_register), # 小区注册到基站 POST
+    path('test/ue/register', ue_reg), # 手机号注册到基站 POST
+    path('op-wireless/srs/report', calculate_position) # 计算手机位置 POST
 ]
 
 if settings.DEBUG:

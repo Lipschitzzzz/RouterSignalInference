@@ -2,26 +2,10 @@
 https://lipschitz.pythonanywhere.com
 
 GET请求：
-/	静态测试数据
-/index	静态测试数据
-/index/all	查询所有数据
-/index/1	查询计数器为1的数据
-数据格式
-{
-    "model": "demo1.info",
-    "pk": 1,
-    "fields": {
-      "unsigned_message_count": 1,
-      "ue_id": 1,
-      "pci_0": 1,
-      "rsrp_0": 1,
-      "pci_1": 1,
-      "rsrp_1": 1,
-      "pci_2": 1,
-      "rsrp_2": 1,
-      "pci_3": 1,
-      "rsrp_3": 1
-    }
-}
+/test/location/1	指定ueid的记录
+/test/location/all	所有记录
 
 POST请求：
+/test/location/add	添加一条记录（目前仅支持5邻居）
+/test/enci/register	小区注册到基站
+/test/ue/register	手机号注册
