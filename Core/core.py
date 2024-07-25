@@ -30,7 +30,7 @@ class Difference(Algorithm):
             self.data.append([self.data[i], self.data[i + 1], self.data[i + 2], 0])
         for i in range(0, k):
             self.data.pop(0)
-                
+
 
     def run(self):
         # print(self.data)
