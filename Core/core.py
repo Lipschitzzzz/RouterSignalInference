@@ -1,5 +1,5 @@
 import json
-import intel_test
+from . import intel_test
 
 class Algorithm:
     def __init__(self):
@@ -21,7 +21,7 @@ class Difference(Algorithm):
                               'nbrRsrp_4', 'nbr_x_4', 'nbr_y_4','nbrRsrp_5', 'nbr_x_5', 'nbr_y_5',]
     def parse(self):
         for i in self.required_list:
-            if self.params.get(i) == 1:
+            if self.params.get(i) != None:
                 self.data.append(self.params[i])
             else:
                 self.data.append(-1)
@@ -33,7 +33,7 @@ class Difference(Algorithm):
                 
 
     def run(self):
-        print(self.data)
+        # print(self.data)
         return intel_test.indoor_inf(self.data)
 # /op-wireless/srs/report
 '''
@@ -67,10 +67,10 @@ data = {
     'nbrPci_4' : 1, 'nbrRsrp_4' : 1, 'nbrRsrq_4' : 1, 'nbrSinr_4' : 1, 'nbrvHaoa_4' : 1, 'nbrvHaoa_4' : 1,
     'nbrPci_5' : 1, 'nbrRsrp_5' : 1, 'nbrRsrq_5' : 1, 'nbrSinr_5' : 1, 'nbrvHaoa_5' : 1, 'nbrvHaoa_5' : 1
 }
-m1 = Difference(data)
-m1.parse()
-result = m1.run()
-print(result)
+# m1 = Difference(data)
+# m1.parse()
+# result = m1.run()
+# print(result)
 # json_data = json.dumps(data)
 # print(data)
 # result = {}

@@ -49,8 +49,9 @@ class BaseStation(models.Model):
         # self.latitude = latitude
         # self.height = height
         # self.azimuth = azimuth
-    enci = models.IntegerField(validators=[MinValueValidator(0)]) # 基站 id
+    gNB_ID = models.IntegerField(validators=[MinValueValidator(0)]) # 基站 id
     # pci = models.BigIntegerField(validators=[MinValueValidator(0)]) # 小区 id 改为外键
+    axis = models.IntegerField(validators=[MinValueValidator(0)])
     longitude = models.FloatField() # 经度
     latitude = models.FloatField() # 纬度
     height = models.FloatField() # 高度

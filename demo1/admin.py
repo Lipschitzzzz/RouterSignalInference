@@ -4,7 +4,7 @@ from .models import *
 # Register your models here.
  
 class BaseStationAdmin(admin.ModelAdmin):
-    list_display = ('enci','longitude', 'longitude', 'latitude', 'height', 'azimuth') # list
+    list_display = ('gNB_ID', 'axis', 'longitude', 'latitude', 'height', 'azimuth') # list
     # fieldsets = (
     #     ['Main',{
     #         'fields':('name','email'),
