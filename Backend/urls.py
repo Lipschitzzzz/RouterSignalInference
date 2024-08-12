@@ -29,6 +29,7 @@ urlpatterns = [
     path('op-wireless/gNB/properties/register', gNB_ID_pci_register), # 小区注册到基站 POST
     # path('test/ue/register', ue_reg), # 手机号注册到基站 POST
     path('op-wireless/srs/report', calculate_position), # 计算手机位置 POST
+    path('write-in-database-by-xlsx', write_in_database_by_xlsx)
 
 ]
 

@@ -3,10 +3,44 @@ from .models import *
 import json, time
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
-from Core import intel_test, core
+from Core import intel_test, core, data
 from datetime import datetime, timedelta
+import pandas as pd
 
 EPOCH = datetime(1970, 1, 1)
+
+def write_in_database_by_xlsx(request):
+    if request.method == "GET":
+        dataset = pd.read_excel("static/data2.xlsx")
+        for i in range(0, 15):
+            gNB_ID = int(dataset["enci"][i])
+            base_info = BaseStation.objects.filter(gNB_ID = gNB_ID)
+            if len(base_info) == 0:
+                new_base_station = BaseStation()
+                new_base_station.gNB_ID = gNB_ID
+                new_base_station.axis = 0
+                new_base_station.longitude = dataset["wgs84_x"][i]
+                new_base_station.latitude = dataset["wgs84_y"][i]
+                new_base_station.height = dataset["height"][i]
+                new_base_station.azimuth = int(dataset["azimuth"][i])
+                new_base_station.save()
+
+                new_pci = PciBaseStation()
+                new_pci.pci = int(dataset["pci"][i])
+                new_pci.base_station_id = new_base_station
+                new_pci.save()
+            else:
+                new_pci = PciBaseStation()
+                new_pci.pci = int(dataset["pci"][i])
+                new_pci.base_station_id = base_info[0]
+                new_pci.save()
+
+        dict = [
+            {'status': 200, 'message': 'Success'}
+        ]
+        return HttpResponse(json.dumps(dict), content_type = 'application/json')
+    dict = []
+    return HttpResponse(json.dumps(dict), content_type = 'application/json')
 
 def query_info_by_ue_id(request, ue_id):
     if request.method == "GET":
@@ -181,6 +215,16 @@ def gNB_ID_pci_register(request):
                 new_base_station.height = height
                 new_base_station.azimuth = azimuth
                 new_base_station.save()
+
+                new_pci = PciBaseStation()
+                new_pci.pci = pci
+                new_pci.base_station_id = new_base_station
+                new_pci.save()
+                dict = [
+                    {'status': 200,
+                     'message': "pci and gNB_ID has been registered successfully"}
+                ]
+                return HttpResponse(json.dumps(dict), content_type = 'application/json')
 
         
         except json.JSONDecodeError:
