@@ -28,7 +28,8 @@ urlpatterns = [
     # path('test/location/add', add_one_location_info), # 指定计数器的记录 POST
     path('op-wireless/gNB/properties/register', gNB_ID_pci_register), # 小区注册到基站 POST
     # path('test/ue/register', ue_reg), # 手机号注册到基站 POST
-    path('op-wireless/srs/report', calculate_position) # 计算手机位置 POST
+    path('op-wireless/srs/report', calculate_position), # 计算手机位置 POST
+
 ]
 
 if settings.DEBUG:

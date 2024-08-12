@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import LocationInfo, BaseStation, PciBaseStation, MobileBaseStation
-import json
+from .models import *
+import json, time
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from Core import intel_test, core
+from datetime import datetime, timedelta
+
+EPOCH = datetime(1970, 1, 1)
 
 def query_info_by_ue_id(request, ue_id):
     if request.method == "GET":
@@ -161,12 +164,20 @@ def gNB_ID_pci_register(request):
             new_pci = PciBaseStation()
             new_pci.pci = pci
             new_pci.base_station_id = base
+            base.axis = axis
+            base.longitude = longitude
+            base.latitude = latitude
+            base.height = height
+            base.azimuth = azimuth
+            base.save()
             new_pci.save()
             dict = [
                 {'status': 200,
                  'message': 'base has been registered successfully'}
             ]
             return HttpResponse(json.dumps(dict), content_type = 'application/json')
+        
+
         # 基站还未注册，先注册基站，再绑定小区
         else:
             new_base_station = BaseStation()
@@ -280,8 +291,20 @@ def ue_reg(request):
 # 基站注册信息修改
 def calculate_position(request):
     try:
-        data = json.loads(request.body)
+        # data = json.loads(request.body)
+        data = {
+            'seqNo' : 1,
+            'timestamp' : "1721050662",
+            'ueId' : 7, 'servPci' : 1, 'servRsrp' : -72, 'servRsrq' : 1, 'servSinr' : 1, 'servTa' : 1, 'servRssi' : 1, 'servHaoa' : 1, 'servVaoa' : 1,
+            'reserve_1' : 1, 'reserve_2' : 1,
+            'nbrPci_1' : 2, 'nbrRsrp_1' : -69, 'nbrRsrq_1' : 1, 'nbrSinr_1' : 1, 'nbrvHaoa_1' : 1, 'nbrvHaoa_1' : 1,
+            'nbrPci_2' : 3, 'nbrRsrp_2' : -71, 'nbrRsrq_2' : 1, 'nbrSinr_2' : 1, 'nbrvHaoa_2' : 1, 'nbrvHaoa_2' : 1,
+            'nbrPci_3' : 4, 'nbrRsrp_3' : -72, 'nbrRsrq_3' : 1, 'nbrSinr_3' : 1, 'nbrvHaoa_3' : 1, 'nbrvHaoa_3' : 1,
+            'nbrPci_4' : 2, 'nbrRsrp_4' : -72, 'nbrRsrq_4' : 1, 'nbrSinr_4' : 1, 'nbrvHaoa_4' : 1, 'nbrvHaoa_4' : 1,
+            'nbrPci_5' : 1, 'nbrRsrp_5' : -73, 'nbrRsrq_5' : 1, 'nbrSinr_5' : 1, 'nbrvHaoa_5' : 1, 'nbrvHaoa_5' : 1
+        }
         pci_list = []
+        # 经纬
         temp = ['servPci', 'nbrPci_1', 'nbrPci_2', 'nbrPci_3',
                 'nbrPci_4', 'nbrPci_5']
         for i in temp:
@@ -306,6 +329,36 @@ def calculate_position(request):
         diff = core.Difference(data)
         diff.parse()
         result = diff.run()
+        milliseconds = int(data.get('timestamp'))
+        if milliseconds == None:
+            milliseconds = int(time.time() * 1000)
+        ueid = data.get('ueId')
+        if ueid != None:
+            ue_information = UEInformation.objects.filter(ueid = ueid)
+            if len(ue_information) != 0:
+                ue_information[0].x = result[0]
+                ue_information[0].y = result[1]
+                ue_information[0].save()
+            else:
+                ue_information = UEInformation()
+                ue_information.ueid = ueid
+                ue_information.x = result[0]
+                ue_information.y = result[1]
+
+                delta = timedelta(milliseconds = milliseconds)
+                ue_information.add_date = EPOCH + delta
+                ue_information.save()
+            # delta = timedelta(milliseconds = milliseconds)
+            # ue_information.add_date = EPOCH + delta
+        else:
+            ue_information = UEInformation()
+            ue_information.ueid = ueid
+            ue_information.x = result[0]
+            ue_information.y = result[1]
+
+            delta = timedelta(milliseconds = milliseconds)
+            ue_information.add_date = EPOCH + delta
+            ue_information.save()
         # print(result)
         dict = [
             {
@@ -314,6 +367,16 @@ def calculate_position(request):
                  'result' : result
             }
         ]
+
+        # ueid = 0
+        # 字典{} 集合
+        # 同时存在的 1-9  
+        # 1  1  ueid = x
+        # 2  2
+        # 3  3
+        # ... ...
+        # 10 10
+
         return HttpResponse(json.dumps(dict), content_type = 'application/json')
         # return JsonResponse({'status': 'success', 'data': data})
     except json.JSONDecodeError:

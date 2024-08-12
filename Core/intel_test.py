@@ -106,7 +106,7 @@ def indoor_inf(data_):
     for i in range(temp):
         if delta__[i] == None:
             print('数据有问题，解算距离比异常，此行数据无法结算。')
-            return
+            return [-1, -1]
 
     # delta__ = []
     # for roots in list_:

@@ -1,6 +1,7 @@
 from typing import Any
 from django.db import models
 from django.core.validators import MinValueValidator
+import django.utils.timezone as timezone
 
 class LocationInfo(models.Model):
     seq_no = models.BigIntegerField(validators=[MinValueValidator(0)]) # 消息计数器
@@ -73,4 +74,11 @@ class MobileBaseStation(models.Model):
     # base_station_id = models.ForeignKey(BaseStation, on_delete = models.CASCADE) # 基站 id
     imsi = models.BigIntegerField() # 手机号码编号
 
+
+class UEInformation(models.Model):
+    ueid = models.BigIntegerField(validators=[MinValueValidator(0)])
+    add_date = models.DateTimeField('Save time',default = timezone.now)
+    mod_date = models.DateTimeField('Last modified time', auto_now = True)
+    x = models.FloatField()
+    y = models.FloatField()
 

@@ -29,7 +29,12 @@ class LocationInfoAdmin(admin.ModelAdmin):
                     'nbr_pci_3', 'nbr_rsrp_3', 'nbr_rsrq_3', 'nbr_sinr_3',
                     'nbr_pci_4', 'nbr_rsrp_4', 'nbr_rsrq_4', 'nbr_sinr_4',
                     'nbr_pci_4', 'nbr_rsrp_4', 'nbr_rsrq_4', 'nbr_sinr_4',)
+    
+class UEInformationAdmin(admin.ModelAdmin):
+    list_display = ('ueid', 'x', 'y', 'add_date', 'mod_date')
+
 admin.site.register(LocationInfo, LocationInfoAdmin)
 admin.site.register(BaseStation, BaseStationAdmin)
 admin.site.register(PciBaseStation, PciBaseStationAdmin)
-admin.site.register(MobileBaseStation)
+# admin.site.register(MobileBaseStation)
+admin.site.register(UEInformation, UEInformationAdmin)

@@ -9,6 +9,8 @@ class Algorithm:
     def run(self):
         pass
 
+
+
 class Difference(Algorithm):
     def __init__(self, params):
         self.method = 'difference'
