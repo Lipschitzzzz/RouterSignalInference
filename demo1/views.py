@@ -130,71 +130,73 @@ def home_page(request):
 
 # 基站工参注册
 def gNB_ID_pci_register(request):
-    try:
-        data = json.loads(request.body)
-        data_list = []
-        temp = ['gNB_ID', 'pci', 'axis', 'longitude',
-                'latitude', 'height', 'azimuth']
-        for i in temp:
-            if data.get(i) != None:
-                data_list.append(data[i])
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            data_list = []
+            temp = ['gNB_ID', 'pci', 'axis', 'longitude',
+                    'latitude', 'height', 'azimuth']
+            for i in temp:
+                if data.get(i) != None:
+                    data_list.append(data[i])
+                else:
+                    data_list.append(0)
+            # gNB_ID = request.POST['gNB_ID'] # 基站 id
+            # pci = request.POST['pci'] # 小区 id
+            # axis = request.POST['axis']
+            # longitude = request.POST['longitude'] # 经度
+            # latitude = request.POST['latitude'] # 纬度
+            # height = request.POST['height'] # 高度
+            # azimuth = request.POST['azimuth'] # 天线水平法线方向
+            gNB_ID = data_list[0]
+            pci = data_list[1]
+            axis = data_list[2]
+            longitude = data_list[3]
+            latitude = data_list[4]
+            height = data_list[5]
+            azimuth = data_list[6]
+
+            # 基站已注册过，直接绑定小区
+            base = BaseStation.objects.filter(gNB_ID = gNB_ID)
+            if len(base) != 0:
+                new_pci = PciBaseStation()
+                new_pci.pci = pci
+                new_pci.base_station_id = base[0]
+                new_pci.save()
+                dict = [
+                    {'status': 200,
+                     'message': "pci and gNB_ID has been registered successfully"}
+                ]
+                return HttpResponse(json.dumps(dict), content_type = 'application/json')
+            # 基站还未注册，先注册基站，再绑定小区
             else:
-                data_list.append(0)
-        # gNB_ID = request.POST['gNB_ID'] # 基站 id
-        # pci = request.POST['pci'] # 小区 id
-        # axis = request.POST['axis']
-        # longitude = request.POST['longitude'] # 经度
-        # latitude = request.POST['latitude'] # 纬度
-        # height = request.POST['height'] # 高度
-        # azimuth = request.POST['azimuth'] # 天线水平法线方向
-        gNB_ID = data_list['gNB_ID']
-        pci = data_list['pci']
-        axis = data_list['axis']
-        longitude = data_list['longitude']
-        latitude = data_list['latitude']
-        height = data_list['height']
-        azimuth = data_list['azimuth']
+                new_base_station = BaseStation()
+                new_base_station.gNB_ID = gNB_ID
+                new_base_station.axis = axis
+                new_base_station.longitude = longitude
+                new_base_station.latitude = latitude
+                new_base_station.height = height
+                new_base_station.azimuth = azimuth
+                new_base_station.save()
 
-        # 基站已注册过，直接绑定小区
-        base = BaseStation.objects.filter(gNB_ID = gNB_ID)
-        if len(base) == 0:
-            new_pci = PciBaseStation()
-            new_pci.pci = pci
-            new_pci.base_station_id = base
-            new_pci.save()
-            dict = [
-                {'status': 200,
-                 'message': 'base has been registered successfully'}
-            ]
-            return HttpResponse(json.dumps(dict), content_type = 'application/json')
-        # 基站还未注册，先注册基站，再绑定小区
-        else:
-            new_base_station = BaseStation()
-            new_base_station.gNB_ID = gNB_ID
-            new_base_station.axis = axis
-            new_base_station.longitude = longitude
-            new_base_station.latitude = latitude
-            new_base_station.height = height
-            new_base_station.azimuth = azimuth
-            new_base_station.save()
-
-            new_pci = PciBaseStation()
-            new_pci.pci = pci
-            new_pci.base_station_id = new_base_station
-            new_pci.save()
-            dict = [
-                {'status': 200,
-                 'message': 'base has been registered successfully'}
-            ]
-            return HttpResponse(json.dumps(dict), content_type = 'application/json')
-    except json.JSONDecodeError:
-        # dict = [
-            # {
-                # 'status': 500,
-                # 'message': 'Unknown Error'}
-            # ]
-        # return HttpResponse(json.dumps(dict), content_type = 'application/json')
-        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+                new_pci = PciBaseStation()
+                new_pci.pci = pci
+                new_pci.base_station_id = new_base_station
+                new_pci.save()
+                dict = [
+                    {'status': 200,
+                     'message': "pci and gNB_ID has been registered successfully"}
+                ]
+                return HttpResponse(json.dumps(dict), content_type = 'application/json')
+        except json.JSONDecodeError:
+            # dict = [
+                # {
+                    # 'status': 500,
+                    # 'message': 'Unknown Error'}
+                # ]
+            # return HttpResponse(json.dumps(dict), content_type = 'application/json')
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 '''
     if request.method == "POST":
 
@@ -279,52 +281,54 @@ def ue_reg(request):
 # 有Vaoa和Haoa -> Aoa算法
 # 基站注册信息修改
 def calculate_position(request):
-    try:
-        data = json.loads(request.body)
-        pci_list = []
-        temp = ['servPci', 'nbrPci_1', 'nbrPci_2', 'nbrPci_3',
-                'nbrPci_4', 'nbrPci_5']
-        for i in temp:
-            if data.get(i) != None:
-                pci_list.append(data[i])
-            else:
-                pci_list.append(-1)
-        # print(pci_list)
-        required_list = [['serv_x', 'serv_y'], ['nbr_x_1', 'nbr_y_1'],
-                            ['nbr_x_2', 'nbr_y_2'], ['nbr_x_3', 'nbr_y_3'],
-                            ['nbr_x_4', 'nbr_y_4'], ['nbr_x_5', 'nbr_y_5']]
-        for i in range(0, len(pci_list)):
-            gNB_ID = PciBaseStation.objects.filter(pci = pci_list[i])
-            # print(enci[0])
-            if len(gNB_ID) != 0:
-                data[required_list[i][0]] = gNB_ID[0].base_station_id.longitude
-                data[required_list[i][1]] = gNB_ID[0].base_station_id.latitude
-            else:
-                data[required_list[i][0]] = -1
-                data[required_list[i][1]] = -1
-        # print(data)
-        diff = core.Difference(data)
-        diff.parse()
-        result = diff.run()
-        # print(result)
-        dict = [
-            {
-                 'status': 200,
-                 'message': 'Success',
-                 'result' : result
-            }
-        ]
-        return HttpResponse(json.dumps(dict), content_type = 'application/json')
-        # return JsonResponse({'status': 'success', 'data': data})
-    except json.JSONDecodeError:
-        # dict = [
-            # {
-                # 'status': 500,
-                # 'message': 'Unknown Error'}
-            # ]
-        # return HttpResponse(json.dumps(dict), content_type = 'application/json')
-        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-    
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            pci_list = []
+            temp = ['servPci', 'nbrPci_1', 'nbrPci_2', 'nbrPci_3',
+                    'nbrPci_4', 'nbrPci_5']
+            for i in temp:
+                if data.get(i) != None:
+                    pci_list.append(data[i])
+                else:
+                    pci_list.append(-1)
+            # print(pci_list)
+            required_list = [['serv_x', 'serv_y'], ['nbr_x_1', 'nbr_y_1'],
+                                ['nbr_x_2', 'nbr_y_2'], ['nbr_x_3', 'nbr_y_3'],
+                                ['nbr_x_4', 'nbr_y_4'], ['nbr_x_5', 'nbr_y_5']]
+            for i in range(0, len(pci_list)):
+                gNB_ID = PciBaseStation.objects.filter(pci = pci_list[i])
+                # print(enci[0])
+                if len(gNB_ID) != 0:
+                    data[required_list[i][0]] = gNB_ID[0].base_station_id.longitude
+                    data[required_list[i][1]] = gNB_ID[0].base_station_id.latitude
+                else:
+                    data[required_list[i][0]] = -1
+                    data[required_list[i][1]] = -1
+            # print(data)
+            diff = core.Difference(data)
+            diff.parse()
+            result = diff.run()
+            # print(result)
+            dict = [
+                {
+                     'status': 200,
+                     'message': 'Success',
+                     'result' : result
+                }
+            ]
+            return HttpResponse(json.dumps(dict), content_type = 'application/json')
+            # return JsonResponse({'status': 'success', 'data': data})
+        except json.JSONDecodeError:
+            # dict = [
+                # {
+                    # 'status': 500,
+                    # 'message': 'Unknown Error'}
+                # ]
+            # return HttpResponse(json.dumps(dict), content_type = 'application/json')
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
 
 
 
