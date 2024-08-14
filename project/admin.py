@@ -77,7 +77,7 @@ class DataManagerAdmin(admin.ModelAdmin):
 
     
 class UEInformationAdmin(admin.ModelAdmin):
-    list_display = ('ueid', 'x', 'y', 'add_date', 'mod_date')
+    list_display = ('ueid', 'x', 'y', 'mod_date')
 
 # admin.site.register(LocationInfo, LocationInfoAdmin)
 admin.site.register(BaseStation, BaseStationAdmin)
