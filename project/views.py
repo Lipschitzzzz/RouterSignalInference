@@ -9,6 +9,41 @@ import pandas as pd
 
 EPOCH = datetime(1970, 1, 1)
 
+def get_position_by_ueid(request, ueid):
+    if request.method == "GET":
+        ueid = ueid
+        ue_information = UEInformation.objects.filter(ueid = ueid)
+        if len(ue_information) == 0:
+            result = [-1, -1]
+            dict = [
+                {
+                     'status': 404,
+                     'message': 'Not Found',
+                     'result' : result
+                }
+            ]
+            return HttpResponse(json.dumps(dict), content_type = 'application/json')
+        else:
+            result = [ue_information[0].x, ue_information[0].y]
+            dict = [
+                {
+                     'status': 200,
+                     'message': 'Success',
+                     'result' : result
+                }
+            ]
+            return HttpResponse(json.dumps(dict), content_type = 'application/json')
+    result = [-1, -1]
+    dict = [
+        {
+            'status': 400,
+            'message': 'Unknown Error',
+            'result' : result
+        }
+    ]
+    return HttpResponse(json.dumps(dict), content_type = 'application/json')
+
+
 def write_in_database_by_xlsx(request):
     if request.method == "GET":
         dataset = pd.read_excel("static/data2.xlsx")
@@ -437,6 +472,7 @@ def calculate_position(request):
                     data[required_list[i][0]] = -1
                     data[required_list[i][1]] = -1
             # print(data)
+            # data = []
             diff = core.Difference(data)
             diff.parse()
             result = diff.run()

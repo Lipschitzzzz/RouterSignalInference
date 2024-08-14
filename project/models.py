@@ -1,6 +1,7 @@
 from typing import Any
 from django.db import models
 from django.core.validators import MinValueValidator
+from datetime import datetime
 import django.utils.timezone as timezone
 
 class LocationInfo(models.Model):
@@ -82,3 +83,10 @@ class UEInformation(models.Model):
     x = models.FloatField()
     y = models.FloatField()
 
+class DataManager(models.Model):
+    now = datetime.now()
+    relative_path = models.CharField(default='uploads/' + str(now.date()), max_length=100)
+    file = models.FileField(upload_to='uploads/' + str(now.date()))
+    add_date = models.DateTimeField('Save time',default = timezone.now)
+    def get_file_path(self):
+        return self.file.path

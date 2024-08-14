@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from demo1.views import *
+from project.views import *
 from django.conf import settings
 from django.conf.urls.static import static
-
+# Engineering Parameter
+# Training Manager path time name
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page), # 所有记录
@@ -29,10 +30,13 @@ urlpatterns = [
     path('op-wireless/gNB/properties/register', gNB_ID_pci_register), # 小区注册到基站 POST
     # path('test/ue/register', ue_reg), # 手机号注册到基站 POST
     path('op-wireless/srs/report', calculate_position), # 计算手机位置 POST
-    path('write-in-database-by-xlsx', write_in_database_by_xlsx)
+    # path('write-in-database-by-xlsx', write_in_database_by_xlsx),
+    path('op-wireless/position/getByUEid/<str:ueid>', get_position_by_ueid)
 
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
                           document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

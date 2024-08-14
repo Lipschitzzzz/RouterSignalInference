@@ -1,5 +1,4 @@
 # RouterSignalInference
-## requirements:
-python 3.10.6
-django 5.0
-
+## guide
+python manage.py runserver
+git pull
