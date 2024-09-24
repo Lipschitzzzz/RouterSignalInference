@@ -74,7 +74,8 @@ class DataManagerAdmin(admin.ModelAdmin):
         except:
             print("Unexpected error please check your data format")
         return None
-
+class TrainingDataManagerAdmin(admin.ModelAdmin):
+    list_display = ('file', 'relative_path', 'add_date')
     
 class UEInformationAdmin(admin.ModelAdmin):
     list_display = ('ueid', 'x', 'y', 'mod_date')
@@ -85,6 +86,7 @@ admin.site.register(PciBaseStation, PciBaseStationAdmin)
 # admin.site.register(MobileBaseStation)
 admin.site.register(UEInformation, UEInformationAdmin)
 admin.site.register(DataManager, DataManagerAdmin)
+admin.site.register(TrainingDataManager, TrainingDataManagerAdmin)
 
 #admin.site.register(LocationInfo, LocationInfoAdmin)
 # admin.site.register(BaseStation, BaseStationAdmin)

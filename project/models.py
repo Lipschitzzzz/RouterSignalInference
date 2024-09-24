@@ -90,3 +90,11 @@ class DataManager(models.Model):
     add_date = models.DateTimeField('Save time',default = timezone.now)
     def get_file_path(self):
         return self.file.path
+
+class TrainingDataManager(models.Model):
+    now = datetime.now()
+    relative_path = models.CharField(default='uploads/training_data/' + str(now.date()), max_length=100)
+    file = models.FileField(upload_to='uploads/training_data/' + str(now.date()))
+    add_date = models.DateTimeField('Save time',default = timezone.now)
+    def get_file_path(self):
+        return self.file.path

@@ -15,6 +15,9 @@ data = {
     'nbrPci_4' : 2, 'nbrRsrp_4' : -72, 'nbrRsrq_4' : 1, 'nbrSinr_4' : 1, 'nbrvHaoa_4' : 1, 'nbrvHaoa_4' : 1,
     'nbrPci_5' : 1, 'nbrRsrp_5' : -73, 'nbrRsrq_5' : 1, 'nbrSinr_5' : 1, 'nbrvHaoa_5' : 1, 'nbrvHaoa_5' : 1
 }
-json_data = json.dumps(data)
-response = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'}, verify=False)
-print(response.content)
+# json_data = json.dumps(data)
+# response = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'}, verify=False)
+# print(response.content)
+
+import os
+os.mkdir('123123')

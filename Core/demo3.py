@@ -9,7 +9,7 @@ url = 'http://192.168.1.17:8000/op-wireless/srs/report'
 data = {
     'seqNo' : 1,
     'timestamp' : "1721050662",
-    'ueId' : 4, 'servPci' : 366, 'servRsrp' : -72, 'servRsrq' : 1, 'servSinr' : 1, 'servTa' : 1, 'servRssi' : 1, 'servHaoa' : 1, 'servVaoa' : 1,
+    'ueId' : 1, 'servPci' : 366, 'servRsrp' : -72, 'servRsrq' : 1, 'servSinr' : 1, 'servTa' : 1, 'servRssi' : 1, 'servHaoa' : 1, 'servVaoa' : 1,
     'reserve_1' : 1, 'reserve_2' : 1,
     'nbrPci_1' : 391, 'nbrRsrp_1' : -69, 'nbrRsrq_1' : 1, 'nbrSinr_1' : 1, 'nbrvHaoa_1' : 1, 'nbrvHaoa_1' : 1,
     'nbrPci_2' : 337, 'nbrRsrp_2' : -71, 'nbrRsrq_2' : 1, 'nbrSinr_2' : 1, 'nbrvHaoa_2' : 1, 'nbrvHaoa_2' : 1,
